@@ -3,51 +3,46 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
-/*
-help im being jumped by lifetimes
-i hate this
-https://pvs-studio.com/en/blog/posts/cpp/1006/
-const int& a = 0; // works
-int& b = 0; dont work
-first lifetime gets extended to end of {}
-*/
+const std::string PLAYER_TEXTURE_FILE = "obama.jpg";
 
-// uses NRVO nvm doesnt work at all
-// named return value optimization
-// c++17+
+class Ball {
+  public:
+    double xVel = 1;
+    double yVel = 1;
+    double speed = 5;
+    sf::CircleShape shape;
+    sf::Texture playerTexture;
 
-// gosh damnitn why are lifetimes
-
-// ight so we just shove it on nthe heap then :P 😔
-sf::Sprite* newSprite(const std::string& fileTexture) {
-    sf::Texture texture;
-    if (!texture.loadFromFile(fileTexture)) {
-        std::cerr << "uh ohhh stinky" << std::endl;
+    Ball(int radius) {
+        if (!playerTexture.loadFromFile(PLAYER_TEXTURE_FILE)) {
+            std::cerr << "unable to load texture" << std::endl;
+        }
+        playerTexture.setSmooth(true);
+        shape.setRadius(radius);
+        shape.setTexture(&playerTexture);
     }
-    texture.setSmooth(true);
-    sf::Sprite* sprite = new sf::Sprite(texture);
-    return sprite;
-}
+
+    void bounceTopBottom() { yVel *= -1; }
+    void bounceLeftRight() { xVel *= -1; }
+};
 
 int main() {
+
     sf::RenderWindow window(sf::VideoMode(600, 600), "Hello World!",
                             sf::Style::Default);
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(60); // use this or the one above, not at same
     // time
-    sf::CircleShape shape(10);
-    shape.setFillColor(sf::Color::Red);
     glEnable(GL_TEXTURE_2D);
-    window.setActive();
 
-    sf::Sprite player = *newSprite("obama.jpg");
-    //    player.setColor(sf::Color(255, 0, 0, 128));
+    Ball ball = Ball(25);
 
     bool running = true;
     while (running) {
@@ -67,8 +62,7 @@ int main() {
         }
 
         window.clear();
-        window.draw(player);
-        window.draw(shape);
+        window.draw(ball.shape);
         window.display();
     }
 
