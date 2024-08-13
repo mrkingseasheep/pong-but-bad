@@ -10,65 +10,74 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
-/*
-help im being jumped by lifetimes
-i hate this
-https://pvs-studio.com/en/blog/posts/cpp/1006/
-const int& a = 0; // works
-int& b = 0; dont work
-first lifetime gets extended to end of {}
-*/
-
-// uses NRVO nvm doesnt work at all
-// named return value optimization
-// c++17+
-
-// gosh damnitn why are lifetimes
-
-// ight so we just shove it on nthe heap then :P 😔
-sf::Sprite* newSprite(const std::string& fileTexture) {
-    sf::Texture texture;
-    if (!texture.loadFromFile(fileTexture)) {
-        std::cerr << "uh ohhh stinky" << std::endl;
-    }
-    texture.setSmooth(true);
-    sf::Sprite* sprite = new sf::Sprite(texture);
-    return sprite;
-}
-
-const std::string PLAYER_TEXTURE_FILE = "obama.jpg";
+extern const std::string PLAYER_TEXTURE_FILE = "obama.jpg";
+extern const double SCR_SZ_X = 800;
+extern const double SCR_SZ_Y = 600;
 
 class Ball {
   public:
     double xVel = 1;
     double yVel = 1;
     double speed = 5;
+    double rotSpeed = 5;
+    double radius = 25;
     sf::CircleShape shape;
     sf::Texture playerTexture;
 
-    Ball(int radius) {
+    Ball() {}
+
+    Ball(double rad) : radius(rad) {
         if (!playerTexture.loadFromFile(PLAYER_TEXTURE_FILE)) {
             std::cerr << "unable to load texture" << std::endl;
         }
         playerTexture.setSmooth(true);
+        shape.setOrigin(radius, radius);
         shape.setRadius(radius);
         shape.setTexture(&playerTexture);
+        center();
+    }
+
+    void center() { shape.setPosition(SCR_SZ_X / 2, SCR_SZ_Y / 2); }
+
+    void move() {
+        double curX = shape.getPosition().x;
+        double curY = shape.getPosition().y;
+
+        if (curY - radius < 0 || curY + radius > SCR_SZ_Y) {
+            bounceTopBottom();
+        }
+        if (curX - radius < 0 || curX + radius > SCR_SZ_X) {
+            bounceLeftRight();
+        }
+
+        shape.move(xVel * speed, yVel * speed);
+        shape.rotate(rotSpeed);
     }
 
     void bounceTopBottom() { yVel *= -1; }
     void bounceLeftRight() { xVel *= -1; }
 };
 
+class Game {
+    Ball ball;
+
+  public:
+    Game() { ball = Ball(25); }
+
+    void render(sf::RenderWindow& window) {
+        window.clear();
+        window.draw(ball.shape);
+        ball.move();
+        window.display();
+    }
+};
+
 int main() {
+    sf::RenderWindow window(sf::VideoMode(SCR_SZ_X, SCR_SZ_Y), "Hi");
+    window.setFramerateLimit(60);
 
-    sf::RenderWindow window(sf::VideoMode(600, 600), "Hello World!",
-                            sf::Style::Default);
-    window.setVerticalSyncEnabled(true);
-    // window.setFramerateLimit(60); // use this or the one above, not at same
-    // time
-    glEnable(GL_TEXTURE_2D);
-
-    Ball ball = Ball(25);
+    /*Ball ball = Ball(25);*/
+    Game pong;
 
     bool running = true;
     while (running) {
@@ -81,15 +90,13 @@ int main() {
             case sf::Event::Resized:
                 std::cout << "w: " << event.size.width << std::endl;
                 std::cout << "h: " << event.size.height << std::endl;
-                glViewport(0, 0, event.size.width, event.size.height);
+                // was there a resize func here?
+                // oh it was the opengl one, no need here
             default:
                 break;
             }
         }
-
-        window.clear();
-        window.draw(ball.shape);
-        window.display();
+        pong.render(window);
     }
 
     return 0;
