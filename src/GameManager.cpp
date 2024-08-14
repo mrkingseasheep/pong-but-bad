@@ -23,6 +23,9 @@ void GameManager::render(sf::RenderWindow& window) {
     window.clear();
     window.draw(divLine);
     window.draw(ball.sprite);
+    window.draw(player.sprite);
+    player.move(1);
+    window.draw(cpu.sprite);
     ball.move();
     window.display();
 }
