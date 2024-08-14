@@ -6,7 +6,7 @@
 Ball::Ball(double rad) {
     xVel = 1;
     yVel = 1;
-    rotVel = 10;
+    rotVel = 5;
     speed = 5;
     radius = rad;
     if (!texture.loadFromFile(PLAYER_TEXTURE_FILE)) {
