@@ -9,17 +9,20 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
-#include "game.hpp"
+#include "Ball.hpp"
+/*#include "game.hpp"*/
 
-const std::string PLAYER_TEXTURE_FILE = "obama.jpg";
-const double SCR_SZ_X = 800;
-const double SCR_SZ_Y = 600;
+const std::string PLAYER_TEXTURE_FILE = "img/obama.jpg";
+double SCR_SZ_X = 800;
+double SCR_SZ_Y = 600;
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(SCR_SZ_X, SCR_SZ_Y), "Hi");
     window.setFramerateLimit(60);
 
-    Game pong;
+    /*Game pong;*/
+    Ball ball(25);
+    ball.set_speed(5);
 
     bool running = true;
     while (running) {
@@ -38,7 +41,11 @@ int main() {
                 break;
             }
         }
-        pong.render(window);
+        /*pong.render(window);*/
+        window.clear();
+        window.draw(ball.sprite);
+        ball.move();
+        window.display();
     }
 
     return 0;
