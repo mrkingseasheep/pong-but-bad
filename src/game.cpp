@@ -2,17 +2,13 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "ball.hpp"
+#include "game.hpp"
 
-class Game {
-  public:
-    Ball ball;
+Game::Game() {}
 
-    Game() {}
-
-    void render(sf::RenderWindow& window) {
-        window.clear();
-        window.draw(ball.shape);
-        ball.move();
-        window.display();
-    }
-};
+void Game::render(sf::RenderWindow& window) {
+    window.clear();
+    window.draw(ball.shape);
+    ball.move();
+    window.display();
+}
