@@ -50,12 +50,17 @@ void Ball::bounceOffPaddle(std::vector<Paddle>& solidObjs) {
 
     for (Paddle solid : solidObjs) {
         std::cout << i % 2 << std::endl;
+        solid.sprite.move(10, 0);
         sf::FloatRect paddleBoundBox = solid.sprite.getGlobalBounds();
+
         std::cout << "INSIDE BALL: " << paddleBoundBox.top << ":"
                   << paddleBoundBox.left << std::endl;
+
         solid.print_info();
-        std::cout << "BALL" << ballBoundBox.top << ":" << ballBoundBox.left
-                  << std::endl;
+
+        /*std::cout << "BALL" << ballBoundBox.top << ":" << ballBoundBox.left*/
+        /*          << std::endl;*/
+
         if (ballBoundBox.intersects(paddleBoundBox)) {
             xVel *= -1;
             sprite.move(xVel * speed, 0);

@@ -14,6 +14,7 @@ Paddle::Paddle(double startingX) {
     sprite.setSize(sf::Vector2f(width, height));
     /*sprite.setFillColor(sf::Color(255, 255, 255));*/
     sprite.setPosition(x, y);
+    /*sprite.setOrigin(x, y);*/
 }
 
 // dir has to be 1 or -1
