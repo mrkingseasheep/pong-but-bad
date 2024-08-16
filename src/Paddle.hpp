@@ -3,7 +3,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
-class Paddle : public sf::Sprite {
+class Paddle {
   private:
     double width;
     double height;

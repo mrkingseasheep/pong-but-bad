@@ -14,8 +14,9 @@ GameManager::GameManager()
     : ball(25), divLine(sf::Vector2f(lineWidth, SCR_SZ_Y)),
       player(SCR_SZ_X * 0.05), cpu(SCR_SZ_X * 0.95) {
     ball.set_speed(3);
+    /*solidObjs = {cpu, player};*/
     solidObjs.push_back(cpu);
-    solidObjs.push_back(player);
+    /*solidObjs.push_back(player);*/
 
     divLine.setOrigin(lineWidth / 2, SCR_SZ_Y / 2);
     divLine.setPosition(SCR_SZ_X / 2, SCR_SZ_Y / 2);

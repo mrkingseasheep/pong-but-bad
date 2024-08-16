@@ -27,6 +27,7 @@ void Paddle::move(int dir) {
 
     y = nxtY;
     sprite.setPosition(x, y);
+    std::cout << "===========" << y << std::endl;
 }
 
 void Paddle::bounce() {
@@ -38,6 +39,7 @@ void Paddle::bounce() {
 
     y = nxtY;
     sprite.setPosition(x, y);
+    std::cout << "====" << y << std::endl;
 }
 
 bool Paddle::at_edge(int nxtY) {
@@ -55,6 +57,7 @@ bool Paddle::ball_touching(double ballX, double ballY, double radius) {
     double halfBoard = height / 2;
     bool withinPaddle = ballY < y + halfBoard && ballY > y - halfBoard;
 
+    std::cout << ballY << std::endl;
     if (goodSpot) {
         std::cout << "behind paddle" << std::endl;
         std::cout << SCR_SZ_X / 2 << ":" << ballX << ":" << x << std::endl;
