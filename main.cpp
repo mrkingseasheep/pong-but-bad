@@ -24,7 +24,6 @@ void textureLoad(sf::Texture& texture, const std::string& filepath) {
 
 int main() {
 #define Key sf::Keyboard
-
     const std::string OBAMA_IMG_FILEPATH = "img/obama.png";
     const std::string MONKEY_IMG_FILEPATH = "img/monkey.jpg";
     const std::string SOLID_IMG_FILEPATH = "img/solidColor.jpg";
@@ -44,13 +43,23 @@ int main() {
     bg.setFillColor(sf::Color(100, 0, 100));
     Ball ball;
     ball.setTexture(obama);
-    Paddle player(DIST_FROM_SIDE);
+    Paddle player(DIST_FROM_SIDE, 4);
     player.setTexture(pureColor);
-    Paddle cpu(SCREEN_WIDTH - DIST_FROM_SIDE);
+    Paddle cpu(SCREEN_WIDTH - DIST_FROM_SIDE, 5);
     cpu.setTexture(pureColor);
+    sf::RectangleShape playerGoal(sf::Vector2f(2, SCREEN_HEIGHT));
+    playerGoal.setPosition(0, 0);
+    sf::RectangleShape cpuGoal(sf::Vector2f(2, SCREEN_HEIGHT));
+    cpuGoal.setPosition(SCREEN_WIDTH - 2, 0);
 
+    int score = 0;
+    int cpuScore = 0;
+    sf::Clock clock;
     bool running = true;
+
     while (running) {
+        sf::Time timePassed = clock.getElapsedTime();
+
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -58,10 +67,28 @@ int main() {
             }
         }
 
+        ball.follow_trajectory();
+
         sf::FloatRect ballBox = ball.getGlobalBounds();
         sf::FloatRect playerBox = player.getGlobalBounds();
         sf::FloatRect cpuBox = cpu.getGlobalBounds();
+        sf::FloatRect playerGoalBox = playerGoal.getGlobalBounds();
+        sf::FloatRect cpuGoalBox = cpuGoal.getGlobalBounds();
 
+        if (ballBox.intersects(playerGoalBox)) {
+            ++cpuScore;
+            clock.restart();
+            ball.center();
+            std::cout << "Player: " << score << std::endl;
+            std::cout << "   CPU: " << cpuScore << std::endl;
+        }
+        if (ballBox.intersects(cpuGoalBox)) {
+            ++score;
+            clock.restart();
+            ball.center();
+            std::cout << "Player: " << score << std::endl;
+            std::cout << "   CPU: " << cpuScore << std::endl;
+        }
         if (ballBox.intersects(playerBox)) {
             ball.bounce(playerBox);
         }
@@ -78,17 +105,25 @@ int main() {
 
         // make it move faster with difficulty
         // smarter moves as your score gets higher
-        /*cpu.bounce_move();*/
-        cpu.follow_move(ball.getPosition().y);
+        if (score > 1) {
+            cpu.follow_move(ball.getPosition().y);
+        } else {
+            cpu.bounce_move();
+        }
 
         // uses sprite inheritence now instead of custom func
         // much easier to read
         window.clear();
-        ball.follow_trajectory();
         window.draw(bg);
         window.draw(ball);
         window.draw(player);
         window.draw(cpu);
         window.display();
+
+        /*std::cout << "CHANGING SPEEDS" << std::endl;*/
+        ball.setSpeed(timePassed.asSeconds());
+        ball.setSize(timePassed.asSeconds());
+        cpu.setSpeed(timePassed.asSeconds());
+        player.setSpeed(timePassed.asSeconds());
     }
 }

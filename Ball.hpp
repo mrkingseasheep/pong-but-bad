@@ -10,8 +10,8 @@ extern int SCREEN_HEIGHT;
 
 class Ball : public sf::Sprite {
   private:
-    int xDir;
-    int yDir;
+    double xDir;
+    double yDir;
     double speed;
     double rotSpeed;
     double rad;
@@ -23,4 +23,6 @@ class Ball : public sf::Sprite {
     void bounce(sf::FloatRect&);
     void follow_trajectory();
     void center();
+    void setSpeed(double);
+    void setSize(double);
 };
