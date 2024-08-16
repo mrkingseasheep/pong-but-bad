@@ -43,7 +43,7 @@ void Paddle::bounce_move() {
 
 void Paddle::follow_move(double ballY) {
     double diff = ballY - getPosition().y;
-    std::cout << diff << std::endl;
+    /*std::cout << diff << std::endl;*/
     double nextMov = std::min(std::abs(diff), std::abs(speed));
     if (diff < 0) {
         nextMov *= -1;
