@@ -1,8 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
-class Paddle {
+class Paddle : public sf::Sprite {
   private:
     double width;
     double height;
@@ -20,5 +21,5 @@ class Paddle {
     void bounce();
     void follow_ball();
     bool at_edge(int);
-    void print_info();
+    bool ball_touching(double, double, double);
 };

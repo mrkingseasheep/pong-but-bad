@@ -1,6 +1,8 @@
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <vector>
 
@@ -44,29 +46,27 @@ void Ball::move() {
     sprite.rotate(rotVel);
 }
 
-void Ball::bounceOffPaddle(std::vector<Paddle>& solidObjs) {
+void Ball::bounceOffPaddle(std::vector<Paddle>& solidObjs,
+                           sf::RenderWindow& window) {
     sf::FloatRect ballBoundBox = sprite.getGlobalBounds();
-    int i = 0;
-
     for (Paddle solid : solidObjs) {
-        std::cout << i % 2 << std::endl;
-        solid.sprite.move(10, 0);
         sf::FloatRect paddleBoundBox = solid.sprite.getGlobalBounds();
 
-        std::cout << "INSIDE BALL: " << paddleBoundBox.top << ":"
-                  << paddleBoundBox.left << std::endl;
+        // debug shapes
+        sf::RectangleShape hitbox(
+            sf::Vector2f(paddleBoundBox.width, paddleBoundBox.height));
+        hitbox.setPosition(paddleBoundBox.left, paddleBoundBox.top);
+        hitbox.setOutlineThickness(10);
+        hitbox.setOutlineColor(sf::Color(255, 0, 0));
+        /*window.draw(hitbox);*/
 
-        solid.print_info();
-
-        /*std::cout << "BALL" << ballBoundBox.top << ":" << ballBoundBox.left*/
-        /*          << std::endl;*/
-
-        if (ballBoundBox.intersects(paddleBoundBox)) {
+        /*if (ballBoundBox.intersects(paddleBoundBox)) {*/
+        if (solid.ball_touching(sprite.getPosition().x, sprite.getPosition().y,
+                                radius)) {
             xVel *= -1;
             sprite.move(xVel * speed, 0);
             std::cout << "BOUNCE" << xVel << std::endl;
             return;
         }
-        ++i;
     }
 }

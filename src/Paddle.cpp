@@ -47,7 +47,20 @@ bool Paddle::at_edge(int nxtY) {
     return false;
 }
 
-void Paddle::print_info() {
-    sf::FloatRect paddleBoundBox = sprite.getGlobalBounds();
-    std::cout << paddleBoundBox.top << ":" << paddleBoundBox.left << std::endl;
+bool Paddle::ball_touching(double ballX, double ballY, double radius) {
+    bool overMidLine = ballX > SCR_SZ_X / 2;
+    bool forwardPaddle = (ballX + radius > x) == overMidLine;
+    bool behindPaddle = (ballX - radius < x) == !overMidLine;
+    bool goodSpot = forwardPaddle != behindPaddle;
+    double halfBoard = height / 2;
+    bool withinPaddle = ballY < y + halfBoard && ballY > y - halfBoard;
+
+    if (goodSpot) {
+        std::cout << "behind paddle" << std::endl;
+        std::cout << SCR_SZ_X / 2 << ":" << ballX << ":" << x << std::endl;
+    }
+    /*if (withinPaddle) {*/
+    /*    std::cout << "in paddle" << std::endl;*/
+    /*}*/
+    return (goodSpot && withinPaddle);
 }

@@ -2,6 +2,7 @@
 
 #include "Paddle.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <vector>
@@ -29,5 +30,5 @@ class Ball {
 
     void center();
 
-    void bounceOffPaddle(std::vector<Paddle>& solidObjs);
+    void bounceOffPaddle(std::vector<Paddle>&, sf::RenderWindow&);
 };
