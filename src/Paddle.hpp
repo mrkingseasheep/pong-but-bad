@@ -17,4 +17,7 @@ class Paddle {
     Paddle(double);
 
     void move(int);
+    void bounce();
+    void follow_ball();
+    bool at_edge(int);
 };

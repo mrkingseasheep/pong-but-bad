@@ -1,7 +1,11 @@
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Transformable.hpp>
 #include <iostream>
+#include <vector>
 
 #include "Ball.hpp"
+#include "Paddle.hpp"
 
 Ball::Ball(double rad) {
     xVel = 1;
@@ -38,4 +42,18 @@ void Ball::move() {
 
     sprite.move(xVel * speed, yVel * speed);
     sprite.rotate(rotVel);
+}
+
+void Ball::bounceOffPaddle(std::vector<Paddle>& solidObjs) {
+    sf::FloatRect ballBoundBox = sprite.getGlobalBounds();
+
+    for (Paddle solid : solidObjs) {
+        sf::FloatRect paddleBoundBox = solid.sprite.getGlobalBounds();
+        if (ballBoundBox.intersects(paddleBoundBox)) {
+            xVel *= -1;
+            move();
+            std::cout << "BOUNCE" << xVel << std::endl;
+            return;
+        }
+    }
 }

@@ -5,8 +5,10 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/WindowStyle.hpp>
 #include <iostream>
 
 #include "GameManager.hpp"
@@ -16,7 +18,10 @@ double SCR_SZ_X = 800;
 double SCR_SZ_Y = 600;
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(SCR_SZ_X, SCR_SZ_Y), "Hi");
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    sf::RenderWindow window(sf::VideoMode(SCR_SZ_X, SCR_SZ_Y), "Hi",
+                            sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
     GameManager pong;

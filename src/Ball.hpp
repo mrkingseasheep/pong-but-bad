@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Paddle.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Transformable.hpp>
+#include <vector>
 
 extern const std::string PLAYER_TEXTURE_FILE;
 extern double SCR_SZ_X;
@@ -25,4 +28,6 @@ class Ball {
     void set_speed(double);
 
     void center();
+
+    void bounceOffPaddle(std::vector<Paddle>& solidObjs);
 };
