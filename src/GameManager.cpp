@@ -28,9 +28,9 @@ void GameManager::render(sf::RenderWindow& window) {
     window.draw(player.sprite);
     window.draw(cpu.sprite);
 
+    ball.bounceOffPaddle(solidObjs);
     player.move(1);
     cpu.bounce();
-    ball.bounceOffPaddle(solidObjs);
     ball.move();
     window.display();
 }

@@ -1,14 +1,16 @@
 #include "Paddle.hpp"
 #include "Ball.hpp"
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 
 Paddle::Paddle(double startingX) {
     movSpeed = 3;
     x = startingX;
     y = SCR_SZ_Y / 2;
     width = 10;
-    height = 30;
+    height = 50;
     sprite.setSize(sf::Vector2f(width, height));
     /*sprite.setFillColor(sf::Color(255, 255, 255));*/
     sprite.setPosition(x, y);
@@ -18,7 +20,7 @@ Paddle::Paddle(double startingX) {
 void Paddle::move(int dir) {
     movSpeed *= dir;
     double nxtY = y + movSpeed;
-    if (!at_edge(nxtY)) {
+    if (at_edge(nxtY)) {
         return;
     }
 
@@ -42,4 +44,9 @@ bool Paddle::at_edge(int nxtY) {
         return true;
     }
     return false;
+}
+
+void Paddle::print_info() {
+    sf::FloatRect paddleBoundBox = sprite.getGlobalBounds();
+    std::cout << paddleBoundBox.top << ":" << paddleBoundBox.left << std::endl;
 }
