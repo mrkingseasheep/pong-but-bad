@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -19,7 +20,7 @@ class Ball : public sf::Sprite {
   public:
     Ball();
 
-    void bounce();
+    void bounce(sf::FloatRect&);
     void follow_trajectory();
     void center();
 };

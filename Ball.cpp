@@ -1,4 +1,5 @@
 #include "Ball.hpp"
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
@@ -31,3 +32,11 @@ void Ball::follow_trajectory() {
 }
 
 void Ball::center() { setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2); }
+
+void Ball::bounce(sf::FloatRect& badBox) {
+    xDir *= -1;
+    while (getGlobalBounds().intersects(badBox)) {
+        move(xDir * speed * 0.2, 0);
+    }
+    /*yDir *= -1;*/
+}

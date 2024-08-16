@@ -10,8 +10,12 @@ class Paddle : public sf::Sprite {
     double height;
     double width;
     double xPos;
+    double speed;
 
   public:
-    Paddle(int);
+    Paddle(double);
     void player_move(int);
+    bool at_edge(double);
+    void bounce_move();
+    void follow_move(double);
 };
