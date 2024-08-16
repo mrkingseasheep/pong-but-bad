@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Ball.hpp"
+#include "Paddle.hpp"
 
 int SCREEN_WIDTH = 600;
 int SCREEN_HEIGHT = 400;
@@ -29,7 +30,11 @@ int main() {
     }
     monkey.setSmooth(true);
 
-    Ball ball(obama);
+    Ball ball;
+    ball.setTexture(obama);
+
+    Paddle player(25);
+    player.setTexture(monkey);
 
     bool running = true;
     while (running) {
@@ -40,9 +45,11 @@ int main() {
             }
         }
 
+        // uses sprite inheritence now instead of custom func
+        // much easier to read
         window.clear();
         ball.follow_trajectory();
-        ball.draw_ball(window);
+        window.draw(ball);
         window.display();
     }
 }
