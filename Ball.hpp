@@ -16,6 +16,7 @@ class Ball : public sf::Sprite {
     double rotSpeed;
     double rad;
     double scale;
+    bool permSizeSet;
 
   public:
     Ball();
@@ -25,4 +26,5 @@ class Ball : public sf::Sprite {
     void center();
     void setSpeed(double);
     void setSize(double);
+    void powerup(double);
 };

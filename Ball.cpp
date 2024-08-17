@@ -16,6 +16,7 @@ Ball::Ball() {
     rad *= scale;
     rotSpeed = 5;
     center();
+    permSizeSet = false;
 }
 
 void Ball::follow_trajectory() {
@@ -67,6 +68,16 @@ void Ball::setSpeed(double timeSecs) {
 }
 
 void Ball::setSize(double timeSecs) {
+    if (permSizeSet) {
+        return;
+    }
     double newScale = scale - timeSecs / 1000 / 2;
     setScale(newScale, newScale);
+}
+
+void Ball::powerup(double permSize) {
+    permSizeSet = true;
+    scale = permSize;
+    rad = permSize;
+    setScale(permSize, permSize);
 }

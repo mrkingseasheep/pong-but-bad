@@ -16,6 +16,7 @@
 
 #include "Ball.hpp"
 #include "Paddle.hpp"
+#include "Powerup.hpp"
 
 int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 600;
@@ -75,6 +76,8 @@ int main() {
     cpuGoal.setPosition(SCREEN_WIDTH - 2, 0);
     sf::RectangleShape line(sf::Vector2f(5, SCREEN_HEIGHT));
     line.setPosition(SCREEN_WIDTH / 2, 0);
+    Powerup decreaseBallSize;
+    decreaseBallSize.setTexture(monkey);
 
     sf::SoundBuffer womp;
     soundLoad(womp, WOMP_SOUND_FILEPATH);
@@ -90,27 +93,39 @@ int main() {
     sf::Sound loser;
     loser.setBuffer(lose);
 
-    const int SCORE_PADDING = 25;
+    /// REMOVE IN FINAL PROJECT
+    /// the noise is too loud augh
+    hit.setVolume(0);
+    winner.setVolume(0);
+    loser.setVolume(0);
+
+    const int SCORE_PADDING = 50;
     sf::Font font;
     fontLoad(font, FONT_FILEPATH);
     sf::Text p1score;
     p1score.setFont(font);
     p1score.setFillColor(sf::Color(255, 255, 255));
-    p1score.setPosition(SCORE_PADDING, SCORE_PADDING);
+    p1score.setPosition(SCORE_PADDING, SCORE_PADDING / 2);
 
     sf::Text p2score;
     p2score.setFont(font);
     p2score.setFillColor(sf::Color(255, 255, 255));
-    p2score.setPosition(SCREEN_WIDTH - SCORE_PADDING, SCORE_PADDING);
+    p2score.setPosition(SCREEN_WIDTH - SCORE_PADDING, SCORE_PADDING / 2);
 
     int score = 0;
     int cpuScore = 0;
     sf::Clock clock;
     bool running = true;
+    enum sizePowerUp {
+        notSeen,
+        present,
+        activated,
+    };
+    sizePowerUp status;
+    status = notSeen;
 
     while (running) {
         sf::Time timePassed = clock.getElapsedTime();
-
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -125,6 +140,12 @@ int main() {
         sf::FloatRect cpuBox = cpu.getGlobalBounds();
         sf::FloatRect playerGoalBox = playerGoal.getGlobalBounds();
         sf::FloatRect cpuGoalBox = cpuGoal.getGlobalBounds();
+        sf::FloatRect powerupBox = decreaseBallSize.getGlobalBounds();
+
+        if (ballBox.intersects(powerupBox) && status == present) {
+            status = activated;
+            ball.powerup(0.06);
+        }
 
         if (ballBox.intersects(playerGoalBox)) {
             ++cpuScore;
@@ -177,6 +198,15 @@ int main() {
         window.draw(line);
         window.draw(p1score);
         window.draw(p2score);
+        if (status == notSeen && timePassed.asSeconds() > 5) {
+            status = present;
+            decreaseBallSize.goToRandomPlace();
+            decreaseBallSize.goToRandomPlace();
+            decreaseBallSize.goToRandomPlace();
+            decreaseBallSize.goToRandomPlace();
+        } else if (status == present) {
+            window.draw(decreaseBallSize);
+        }
         window.draw(ball);
         window.draw(player);
         window.draw(cpu);
