@@ -78,6 +78,8 @@ int main() {
     line.setPosition(SCREEN_WIDTH / 2, 0);
     Powerup decreaseBallSize;
     decreaseBallSize.setTexture(monkey);
+    Powerup increasePaddleSize;
+    increasePaddleSize.setTexture(monkey);
 
     sf::SoundBuffer womp;
     soundLoad(womp, WOMP_SOUND_FILEPATH);
@@ -95,9 +97,9 @@ int main() {
 
     /// REMOVE IN FINAL PROJECT
     /// the noise is too loud augh
-    hit.setVolume(0);
-    winner.setVolume(0);
-    loser.setVolume(0);
+    /*hit.setVolume(0);*/
+    /*winner.setVolume(0);*/
+    /*loser.setVolume(0);*/
 
     const int SCORE_PADDING = 50;
     sf::Font font;
@@ -115,7 +117,7 @@ int main() {
     int score = 0;
     int cpuScore = 0;
     sf::Clock clock;
-    bool running = true;
+
     enum sizePowerUp {
         notSeen,
         present,
@@ -124,6 +126,7 @@ int main() {
     sizePowerUp status;
     status = notSeen;
 
+    bool running = true;
     while (running) {
         sf::Time timePassed = clock.getElapsedTime();
         sf::Event event;
